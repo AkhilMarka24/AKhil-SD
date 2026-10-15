@@ -1,0 +1,347 @@
+<title>Akhil Marka · SAP SD</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Akhil Marka, SAP SD Consultant: SAP ECC and S/4HANA Order-to-Cash implementation and support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,500;112,700;112,800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column; the Order-to-Cash document flow is the signature band, projects read like SD documents with a document-number header. */
+:root{
+  --bg:#F5F7FA; --surface:#FFFFFF; --ink:#152132; --muted:#566377; --line:#DCE2EA;
+  --accent:#1D4ED8; --accent-soft:#E6EDFC; --amber:#B45309; --amber-soft:#FBF0E2;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1520; --surface:#151F2D; --ink:#E6ECF4; --muted:#9AA8BC; --line:#26344A;
+  --accent:#7FA3FF; --accent-soft:#1B2A47; --amber:#F2B66B; --amber-soft:#33281A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1520; --surface:#151F2D; --ink:#E6ECF4; --muted:#9AA8BC; --line:#26344A;
+  --accent:#7FA3FF; --accent-soft:#1B2A47; --amber:#F2B66B; --amber-soft:#33281A; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);font-stretch:112%;text-wrap:balance;margin:0;line-height:1.1}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+section{padding-block:56px;border-top:1px solid var(--line)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.sec-head h2{font-size:clamp(26px,3.4vw,34px);font-weight:800}
+
+/* Top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.mark{font-family:var(--display);font-stretch:112%;font-weight:800;font-size:16px;letter-spacing:.02em;text-decoration:none;color:var(--ink)}
+.top nav{display:flex;gap:20px;flex-wrap:wrap}
+.top nav a{font-size:15px;color:var(--muted);text-decoration:none}
+.top nav a:hover{color:var(--ink)}
+@media (max-width:620px){.top nav{display:none}}
+
+/* Hero */
+.hero{padding-block:64px 48px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:48px;align-items:end}
+.hero h1{font-size:clamp(44px,8vw,88px);font-weight:800;letter-spacing:-.01em;margin-top:14px}
+.role{font-family:var(--display);font-stretch:112%;font-weight:500;font-size:clamp(19px,2.4vw,24px);color:var(--accent);margin-top:12px}
+.lede{max-width:60ch;color:var(--muted);margin:20px 0 0}
+.facts{display:grid;gap:0;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.fact{display:flex;justify-content:space-between;gap:16px;padding:14px 18px;border-top:1px solid var(--line)}
+.fact:first-child{border-top:0}
+.fact dt{color:var(--muted);font-size:15px}
+.fact dd{margin:0;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.contact-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.chip{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 6px 6px 16px;font-size:15.5px;max-width:100%}
+.chip span{overflow-wrap:anywhere;user-select:all}
+.chip button{font:500 12.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;border:0;border-radius:999px;padding:6px 12px;background:var(--accent-soft);color:var(--accent);cursor:pointer}
+.chip button:hover{background:var(--accent);color:var(--surface)}
+@media (max-width:820px){.hero{grid-template-columns:1fr;gap:32px;padding-block:40px 40px}}
+
+/* Document flow */
+.flow-intro{max-width:62ch;color:var(--muted);margin:-12px 0 28px}
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;counter-reset:step}
+.doc{position:relative;padding:18px 18px 20px;background:var(--surface);border:1px solid var(--line);margin-left:-1px}
+.doc:first-child{border-radius:10px 0 0 10px;margin-left:0}
+.doc:last-child{border-radius:0 10px 10px 0}
+.doc:not(:last-child)::after{content:"";position:absolute;right:-9px;top:26px;width:16px;height:16px;background:var(--surface);border-top:1px solid var(--line);border-right:1px solid var(--line);transform:rotate(45deg);z-index:1}
+.tcode{font-family:var(--mono);font-size:12.5px;color:var(--amber);background:var(--amber-soft);border-radius:4px;padding:2px 7px;display:inline-block}
+.doc h3{font-size:18px;font-weight:700;margin-top:12px}
+.doc ul{list-style:none;padding:0;margin:10px 0 0;font-size:14.5px;color:var(--muted);line-height:1.5;display:grid;gap:4px}
+.flow-foot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.cross{border:1px dashed var(--line);border-radius:10px;padding:14px 18px;font-size:15px;color:var(--muted)}
+.cross b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
+@media (max-width:900px){
+  .flow{grid-template-columns:1fr}
+  .doc,.doc:first-child,.doc:last-child{margin-left:0;margin-top:-1px;border-radius:0}
+  .doc:first-child{border-radius:10px 10px 0 0;margin-top:0}
+  .doc:last-child{border-radius:0 0 10px 10px}
+  .doc:not(:last-child)::after{right:auto;left:28px;top:auto;bottom:-9px;transform:rotate(135deg)}
+  .flow-foot{grid-template-columns:1fr}
+}
+
+/* Projects */
+.projects{display:grid;gap:20px}
+.proj{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.proj-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;padding:12px 24px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.status{display:inline-flex;align-items:center;gap:8px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.status.live i{background:#16A34A;box-shadow:0 0 0 3px color-mix(in srgb,#16A34A 22%,transparent)}
+.proj-body{padding:22px 24px 24px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:28px}
+.proj h3{font-size:clamp(22px,2.6vw,28px);font-weight:800}
+.proj .type{color:var(--accent);font-weight:600;margin-top:6px}
+.proj .ctx{color:var(--muted);font-size:15.5px;margin-top:10px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tag{font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-radius:4px;padding:2px 8px;color:var(--muted)}
+.proj ul{margin:0;padding-left:18px;display:grid;gap:7px}
+.proj li::marker{color:var(--accent)}
+details{margin-top:10px}
+summary{cursor:pointer;font-family:var(--mono);font-size:13px;color:var(--accent);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+ "}
+details[open] summary::before{content:"− "}
+details ul{margin-top:10px!important}
+@media (max-width:760px){.proj-body{grid-template-columns:1fr;gap:18px}.proj-head,.proj-body{padding-left:18px;padding-right:18px}}
+
+/* Career */
+.career{display:grid;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.job{position:relative;padding:0 0 28px 28px}
+.job:last-child{padding-bottom:0}
+.job::before{content:"";position:absolute;left:-8px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--accent)}
+.job .when{font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.job h3{font-size:21px;font-weight:700;margin-top:4px}
+.job p{margin:4px 0 0;color:var(--muted)}
+
+/* Skills */
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 32px}
+.skill h3{font-family:var(--mono);font-stretch:100%;font-size:12.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);padding-bottom:8px;border-bottom:1px solid var(--line)}
+.skill p{margin:10px 0 0;font-size:15.5px;line-height:1.55}
+@media (max-width:860px){.skills{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:540px){.skills{grid-template-columns:1fr}}
+
+/* Education + contact */
+.edu{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px;align-items:baseline}
+.edu h3{font-size:22px;font-weight:700}
+.edu p{margin:4px 0 0;color:var(--muted)}
+.year{font-family:var(--mono);font-size:15px;color:var(--muted)}
+.closing{background:var(--ink);color:var(--bg);border-top:0}
+.closing h2{font-size:clamp(28px,4.4vw,44px);font-weight:800;max-width:20ch}
+.closing p{color:color-mix(in srgb,var(--bg) 72%,var(--ink));max-width:56ch}
+.closing .chip{background:transparent;border-color:color-mix(in srgb,var(--bg) 30%,var(--ink));color:var(--bg)}
+footer{padding-block:20px;font-size:13.5px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:8px;font-size:14px}
+@media (prefers-reduced-motion:no-preference){.doc{transition:transform .2s}.doc:hover{transform:translateY(-2px)}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">AKHIL MARKA</a>
+    <nav aria-label="Sections">
+      <a href="#otc">Order-to-Cash</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <div class="eyebrow">SAP ECC · SAP S/4HANA · Sales and Distribution</div>
+      <h1>Akhil Marka</h1>
+      <div class="role">SAP SD Consultant</div>
+      <p class="lede">I configure and support end-to-end Order-to-Cash in SAP, from sales documents and pricing through delivery, billing and credit management. My work spans implementation and support projects for automotive and electronics clients, done in close collaboration with MM, FI and ABAP teams.</p>
+      <div class="contact-row">
+        <div class="chip"><span>akhilmarkagoud@gmail.com</span><button type="button" data-copy="akhilmarkagoud@gmail.com">Copy</button></div>
+        <div class="chip"><span>+91-9494274140</span><button type="button" data-copy="+91-9494274140">Copy</button></div>
+      </div>
+    </div>
+    <dl class="facts" aria-label="At a glance">
+      <div class="fact"><dt>Experience</dt><dd>4+ years</dd></div>
+      <div class="fact"><dt>Client projects</dt><dd>3</dd></div>
+      <div class="fact"><dt>Project types</dt><dd>Implementation, Support, AMS</dd></div>
+      <div class="fact"><dt>Industries</dt><dd>Automotive, Electronics</dd></div>
+      <div class="fact"><dt>Currently</dt><dd>Openova Solutions</dd></div>
+    </dl>
+  </div>
+
+  <section id="otc">
+    <div class="wrap">
+      <div class="sec-head"><h2>The Order-to-Cash flow I work across</h2><span class="eyebrow">Document flow</span></div>
+      <p class="flow-intro">Each SD document in the chain, with the standard transaction and the configuration and support work I have done at that step.</p>
+      <div class="flow">
+        <div class="doc"><span class="tcode">VA21</span><h3>Quotation</h3><ul><li>Customer and material master</li><li>Business Partner (BP)</li><li>Info records</li></ul></div>
+        <div class="doc"><span class="tcode">VA01</span><h3>Sales Order</h3><ul><li>Document types, item and schedule line categories</li><li>Copy controls, incompletion</li><li>Cash, rush, third-party, consignment</li></ul></div>
+        <div class="doc"><span class="tcode">VL01N</span><h3>Delivery</h3><ul><li>Shipping point determination</li><li>Picking and packing</li><li>Delivery blocks</li></ul></div>
+        <div class="doc"><span class="tcode">VL02N</span><h3>Goods Issue</h3><ul><li>Post Goods Issue (PGI)</li><li>Stock transport orders</li><li>Intercompany sales</li></ul></div>
+        <div class="doc"><span class="tcode">VF01</span><h3>Billing</h3><ul><li>Order- and delivery-related billing</li><li>Pro-forma, credit and debit memos</li><li>Account determination</li></ul></div>
+      </div>
+      <div class="flow-foot">
+        <div class="cross"><b>Pricing and tax</b>Pricing procedures, condition types, access sequences, condition records, GST and VAT determination</div>
+        <div class="cross"><b>Credit management</b>Static and dynamic credit checks, FSCM Credit Management in S/4HANA</div>
+        <div class="cross"><b>Output and integration</b>Output, partner and text determination, IDocs and interfaces with MM, FI and PI</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="sec-head"><h2>Client projects</h2><span class="eyebrow">Most recent first</span></div>
+      <div class="projects">
+
+        <article class="proj">
+          <div class="proj-head"><span class="status live"><i></i>Active · Support</span><span>May 2025 – Present</span><span>Openova Solutions</span></div>
+          <div class="proj-body">
+            <div>
+              <h3>Tata Motors</h3>
+              <div class="type">SAP SD Support Project</div>
+              <p class="ctx">Commercial vehicles manufacturer (formerly TML Commercial Vehicles).</p>
+              <div class="tags"><span class="tag">ECC</span><span class="tag">S/4HANA</span><span class="tag">Jira</span></div>
+            </div>
+            <div>
+              <ul>
+                <li>Gathered and analyzed business requirements and contributed to project preparation.</li>
+                <li>Configured enterprise structure and Business Partner (BP), and maintained master data to business specifications.</li>
+                <li>Customized sales document types, item category determination and schedule line categories.</li>
+                <li>Authored functional specifications and handed requirements over to the technical team.</li>
+              </ul>
+              <details><summary>More detail</summary>
+                <ul>
+                  <li>Collaborated with cross-module consultants to deliver integrated configurations.</li>
+                  <li>Managed and tested user stories in Jira; executed unit testing and SIT and supported cutover.</li>
+                  <li>Gained working exposure to rebates, discounts and e-invoicing.</li>
+                </ul>
+              </details>
+            </div>
+          </div>
+        </article>
+
+        <article class="proj">
+          <div class="proj-head"><span class="status"><i></i>Completed · Implementation</span><span>Oct 2023 – May 2025</span><span>Openova Solutions</span></div>
+          <div class="proj-body">
+            <div>
+              <h3>Ashok Leyland Ltd</h3>
+              <div class="type">SAP SD Implementation Project</div>
+              <p class="ctx">Flagship of the Hinduja Group and India’s second-largest commercial vehicle manufacturer.</p>
+              <div class="tags"><span class="tag">ECC</span><span class="tag">S/4HANA</span><span class="tag">OTC</span><span class="tag">Data migration</span></div>
+            </div>
+            <div>
+              <ul>
+                <li>Configured end-to-end Order-to-Cash covering sales order processing, delivery, billing and pricing.</li>
+                <li>Configured sales document types, item categories, schedule line categories, copy controls and billing.</li>
+                <li>Configured pricing procedures, including condition types, access sequences and account determination.</li>
+                <li>Configured intercompany sales, third-party sales, STO, returns and credit management.</li>
+              </ul>
+              <details><summary>More detail</summary>
+                <ul>
+                  <li>Set up output, text and partner determination along with incompletion procedures.</li>
+                  <li>Delivered Realization phase activities: configuration, unit testing, integration testing and defect fixing.</li>
+                  <li>Prepared functional specifications for custom developments and coordinated with MM, FI and ABAP teams on enhancements, interfaces, reports and forms.</li>
+                  <li>Executed SIT, UAT and regression testing and supported defect resolution.</li>
+                  <li>Supported data migration of customer master and Business Partner records in S/4HANA and took part in cutover.</li>
+                </ul>
+              </details>
+            </div>
+          </div>
+        </article>
+
+        <article class="proj">
+          <div class="proj-head"><span class="status"><i></i>Completed · AMS</span><span>May 2022 – Sep 2023</span><span>Vivid Technologies</span></div>
+          <div class="proj-body">
+            <div>
+              <h3>Panasonic APAC</h3>
+              <div class="type">SAP SD Application Management Support</div>
+              <p class="ctx">Multinational electronics corporation; program standardizing SD processes across APAC on SAP S/4HANA.</p>
+              <div class="tags"><span class="tag">S/4HANA</span><span class="tag">L2/L3</span><span class="tag">ITIL</span><span class="tag">ServiceNow</span></div>
+            </div>
+            <div>
+              <ul>
+                <li>Provided L2/L3 support for SAP SD across Panasonic APAC business units within SLA and KPI targets.</li>
+                <li>Managed incidents, problems and change requests following ITIL processes in ServiceNow.</li>
+                <li>Resolved production issues in pricing, billing, credit management, delivery blocks and output determination.</li>
+                <li>Performed root cause analysis and implemented permanent fixes to reduce recurring incidents.</li>
+              </ul>
+              <details><summary>More detail</summary>
+                <ul>
+                  <li>Supported end-to-end O2C operations: sales orders, deliveries, billing, returns and cancellations.</li>
+                  <li>Delivered minor enhancements and change requests through configuration and functional specifications.</li>
+                  <li>Maintained pricing procedures, condition types, access sequences and condition records.</li>
+                  <li>Supported billing documents, credit and debit memos, invoice corrections and FI integration issues.</li>
+                  <li>Troubleshot IDoc, interface and output issues for sales orders, deliveries and billing.</li>
+                  <li>Maintained customer master data, sales area data and partner functions.</li>
+                  <li>Coordinated with MM, FI, WM/EWM and Logistics teams on cross-functional issues.</li>
+                  <li>Supported UAT, regression testing and transport management for AMS changes.</li>
+                  <li>Maintained functional documentation, KT documents and SOPs, and supported business users.</li>
+                  <li>Took part in annual Disaster Recovery drills (pre- and post-flip, pre- and post-flop) and continuous improvement initiatives.</li>
+                </ul>
+              </details>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="career">
+    <div class="wrap">
+      <div class="sec-head"><h2>Career</h2></div>
+      <div class="career">
+        <div class="job"><div class="when">Oct 2023 – Present</div><h3>SAP SD Associate Consultant</h3><p>Openova Solutions Pvt. Ltd. · Tata Motors, Ashok Leyland</p></div>
+        <div class="job"><div class="when">May 2022 – Sep 2023</div><h3>SAP SD Consultant</h3><p>Vivid Technologies Inc. · Panasonic APAC</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="sec-head"><h2>Skills</h2><span class="eyebrow">SAP SD · S/4HANA</span></div>
+      <div class="skills">
+        <div class="skill"><h3>Sales processes</h3><p>Order-to-Cash, quotations, cash sales, rush orders, third-party, consignment, intercompany, STO, returns, credit and debit memos</p></div>
+        <div class="skill"><h3>S/4HANA</h3><p>Business Partner (BP), Advanced Available-to-Promise (AATP), FSCM Credit Management, Simple Logistics</p></div>
+        <div class="skill"><h3>Sales documents</h3><p>Document types, item categories, schedule line categories, copy controls, incompletion procedures</p></div>
+        <div class="skill"><h3>Pricing and tax</h3><p>Pricing procedures, condition technique, access sequences, account determination, GST, VAT and sales tax; exposure to rebates and e-invoicing</p></div>
+        <div class="skill"><h3>Master data and structure</h3><p>Sales organization, distribution channel, division, sales area; customer and material master, info records, condition records</p></div>
+        <div class="skill"><h3>Shipping and billing</h3><p>Shipping point determination, picking, packing, PGI; order- and delivery-related, pro-forma and commercial invoices</p></div>
+        <div class="skill"><h3>Integration</h3><p>IDocs and interfaces; output, partner and text determination; cross-module work with MM, FI, WM/EWM and PI</p></div>
+        <div class="skill"><h3>Project lifecycle</h3><p>Requirement gathering, functional specifications, configuration, unit testing, SIT, UAT, regression, data migration, cutover, go-live support</p></div>
+        <div class="skill"><h3>Support and tools</h3><p>L2/L3 AMS, ITIL incident, problem and change management, RCA, SLA/KPI, transport management; ServiceNow, Jira</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <div class="sec-head"><h2>Education</h2></div>
+      <div class="edu">
+        <div><h3>B.Tech, Computer Science and Engineering</h3><p>Marri Laxman Reddy Institute of Technology &amp; Management, Hyderabad</p></div>
+        <span class="year">2022</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="closing">
+    <div class="wrap">
+      <div class="eyebrow" style="color:inherit;opacity:.7">Contact</div>
+      <h2 style="margin-top:12px">Looking for an SAP SD consultant?</h2>
+      <p>I’m open to SAP SD roles on S/4HANA implementation and support projects. Reach me by email or phone.</p>
+      <div class="contact-row">
+        <div class="chip"><span>akhilmarkagoud@gmail.com</span><button type="button" data-copy="akhilmarkagoud@gmail.com">Copy</button></div>
+        <div class="chip"><span>+91-9494274140</span><button type="button" data-copy="+91-9494274140">Copy</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap">© Akhil Marka · SAP SD Consultant</div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+  var toast=document.getElementById('toast'),t;
+  function show(msg){toast.textContent=msg;toast.hidden=false;clearTimeout(t);t=setTimeout(function(){toast.hidden=true},1600)}
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var v=btn.getAttribute('data-copy');
+      var sel=function(){var r=document.createRange();r.selectNodeContents(btn.previousElementSibling);var s=getSelection();s.removeAllRanges();s.addRange(r);show('Selected. Press Ctrl+C to copy')};
+      try{navigator.clipboard.writeText(v).then(function(){show('Copied '+v)},sel)}catch(e){sel()}
+    });
+  });
+})();
+</script>
